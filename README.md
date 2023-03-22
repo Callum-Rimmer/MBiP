@@ -157,3 +157,8 @@ source ~/.bashrc
 ```
 Your screen should now look like this:
 
+![Screenshot 2023-03-22 at 16 25 05](https://user-images.githubusercontent.com/72881801/226972490-14d7d033-bf42-4d84-b2b9-9f6bbadd1e76.png)
+
+
+
+
