@@ -226,22 +226,19 @@ The GitHub repository you created your R project from contained two DNA sequenci
 
 Make sure you have activated your fastqc environment.
 
-Make a directory called `raw_reads`. Move the two read files into that directoryWhat commands do you need to use to move into your Downloads folder and then make a directory called `workshop`.
-
-Move your read files into the workshop folder.
+Make a directory called `raw_reads`. Move the two read files into that directory. What commands do you need to use to do this?
 
 You can run `fastqc` on your read files by typing:
 ```
-fastqc *.fastq -t 4 
+fastqc raw_reads/*.fastq.gz
 ```
 Can you answer these questions:
 
-1. What does the `-t 4`mean
-2. What are we saying with `*.fastq`?
-3. How would you find out what parameters fastqc needs
+2. What are we saying with `*.fastq.gz`?
+3. How would you find out what parameters fastqc needs?
 
 
-fastqc should output a html file per read file, you can view this with Firefox. You can find out more information about the statistics fastqc outputs by looking at the [project webpage.](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+fastqc should output a html file per read file, you can view this using a web browser. You can find out more information about the statistics fastqc outputs by looking at the [project webpage.](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 
 The read quality checks out, so we can move onto the next step.
 
@@ -258,29 +255,26 @@ The program we are going to use is called `trimmomatic`.
 1. Create an environment called `trimmomatic`
 2. Activate this environment
 3. Install `trimmomatic`, using conda, in this environment
-4. Download the `NexteraPE-PE.fa` file from NOW and place this in your `workshop` directory
 
 Trimmomatic uses a few more parameters than fastqc. The command we are going to use is:
 ```
-trimmomatic PE -threads 4 bacteria_R1.fastq bacteria_R2.fastq bacteria_R1p.fastq bacteria_R1u.fastq bacteria_R2p.fastq bacteria_R2u.fastq ILLUMINACLIP:NexteraPE-PE.fa:2:20:10
+trimmomatic PE raw_reads/unknown_R1.fastq.gz raw_reads/unknown_R2.fastq.gz -baseout unknown_species_filtered.fastq.gz ILLUMINACLIP:~/miniconda3/envs/trimmomatic/share/trimmomatic-0.39-2/adapters/NexteraPE-PE.fa:2:20:10
 ```
 
-`bacteria_R1.fastq` and `bacteria_R2.fastq` are your input files.
+`unknown_R1.fastq.gz` and `unknown_R2.fastq.gz` are your input files.
 
-`ILLUMINACLIP:NexteraPE-PE.fa:2:20:10` is where the adapter sequences are stored that trimmomatic will look for in your data, along with some extra tweaks to the settings
+`ILLUMINACLIP:~/path/to/NexteraPE-PE.fa:2:20:10` is where the adapter sequences are stored that trimmomatic will look for in your data, along with some extra tweaks to the settings.
 
 The output files are...\
-`bacteria_R1p.fastq` and `bacteria_R1u.fastq` (paired and unpaired)\
-`bacteria_R2p.fastq` and `bacteria_R2u.fastq` (paired and unpaired)
+`filtered_reads_1P.fastq.gz` and `filtered_reads_1U.fastq.gz` (paired and unpaired)\
+`filtered_reads_2P.fastq.gz` and `filtered_reads_2U.fastq.gz` (paired and unpaired)
 
 The unpaired files can be deleted since they contain all the garbage reads, we just want the paired files.
 
 Now let's tidy things up:
 
-1. Make a folder called `raw_reads` and move your original files from NOW into this folder
-2. Make a folder called `trimmed_reads` and move your paired files from `trimmomatic` into this folder
-3. Remove the `.zip` files from fastqc
-4. Make a folder called `fastqc` and move your html files into this folder
+1. Delete the unpaired files if you haven't already.
+2. Make a folder called `trimmed_reads` and move your paired files into this folder.
 
 ### Assembling the genome
 
@@ -290,24 +284,18 @@ The program we are going to use to do this is called `spades`
 
 1. Create an environment called `spades`
 2. Activate the environment and install the program `spades`
-3. In your `workshop` folder, create a folder called `spades`
-
-Before we run `spades`, it might be sensible to set up a Tmux session. spades can take a little while to run, but with Tmux you can detach from your session and you don't have to worry about staying on the terminal with spades running. How do we set up a Tmux session?
 ```
-tmux new -s genome_assembly
+conda install -c conda-forge -c bioconda spades=3.15.5
 ```
-If you want to detach, press `CTRL+B` then press `d`
-
-To re-attach type `tmux a`
+3. Create a folder called `spades`
 
 Now we can run the main command:
 ```
-spades.py -1 trimmed_reads/bacteria_R1p.fastq -2 trimmed_reads/bacteria_R2p.fastq -o spades -t 4
+spades.py -1 trimmed_reads/filtered_reads_1P.fastq.gz -2 trimmed_reads/filtered_reads_2P.fastq.gz -o spades
 ```
 The `-1` flag is for your trimmed forward reads file.\
 The `-2` flag is for your trimmed reverse reads file.\
 The `-o` flag is the output folder\
-The `-t 4` flag is for using for CPU threads
 
 What we're doing is trying to piece the sequencing reads into larger fragments called contigs. The contigs then get stiched together to form the assembled genome.
 
@@ -319,6 +307,8 @@ Q.  Each contig begins with a header line containing all the information about t
   a)  How can we view this file?\
   b)  How could you extract all the header lines i.e. contig names and print them to the terminal?
   
+The below screenshot shows you how to export the `contigs.fasta` file.
+
 ### Species identification
 
 Now we have our assembled genome, let's find out what species of bacteria it belongs to.
