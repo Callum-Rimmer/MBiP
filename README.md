@@ -23,4 +23,7 @@ https://github.com/Callum-Rimmer/MBiP.git
 ```
 Your screen should now look like this...
 
+![Screenshot](https://user-images.githubusercontent.com/72881801/226890032-f2cd9eec-3639-459e-8e1b-55b0c21ef202.png)
+
+
 
