@@ -309,6 +309,9 @@ Q.  Each contig begins with a header line containing all the information about t
   
 The below screenshot shows you how to export the `contigs.fasta` file.
 
+![Picture1](https://user-images.githubusercontent.com/72881801/227059669-f72092df-e13e-4e8c-b8e2-1561f9b10192.png)
+
+
 ### Species identification
 
 Now we have our assembled genome, let's find out what species of bacteria it belongs to.
