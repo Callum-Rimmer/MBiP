@@ -291,7 +291,7 @@ conda install -c conda-forge -c bioconda spades=3.15.5
 
 Now we can run the main command:
 ```
-spades.py -1 trimmed_reads/filtered_reads_1P.fastq.gz -2 trimmed_reads/filtered_reads_2P.fastq.gz -o spades
+spades.py -1 trimmed_reads/unknown_species_filtered_1P.fastq.gz -2 trimmed_reads/unknown_species_filtered_2P.fastq.gz -o spades
 ```
 The `-1` flag is for your trimmed forward reads file.\
 The `-2` flag is for your trimmed reverse reads file.\
