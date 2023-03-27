@@ -336,7 +336,7 @@ Before we install it however, we are going to use an updated package manager. Ma
 conda install -c conda-forge mamba
 ```
 Now you can replace `conda` in each command with `mamba`.
-\
+
 1. Create a new environment for `fastANI` with:
 ```
 mamba create -n fastANI
