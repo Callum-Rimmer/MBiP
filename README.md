@@ -311,15 +311,74 @@ The below screenshot shows you how to export the `contigs.fasta` file.
 
 ![Picture1](https://user-images.githubusercontent.com/72881801/227059669-f72092df-e13e-4e8c-b8e2-1561f9b10192.png)
 
-
-### Species identification
-
-Now we have our assembled genome, let's find out what species of bacteria it belongs to.
-
-You can upload your fasta file to [PubMLST](https://pubmlst.org/species-id), which uses ribosomal multi-locus sequence typing for species identification.
-
 ### Searching for antibiotic resistance genes
 
 We can also upload our genome to the Comprehensive antibiotic-resistance gene database [(CARD)](https://card.mcmaster.ca/analyze/rgi)
 
 Does the genome encode any antibiotic resistance genes?
+
+### Species identification
+
+Now we have our assembled genome, let's find out what species of bacteria it belongs to.
+
+###### PubMLST
+
+You can upload your fasta file to [PubMLST](https://pubmlst.org/species-id), which uses ribosomal multi-locus sequence typing for species identification.
+
+###### Average nucleotide identity
+
+One of the most common ways we verify the species of an organism is by calculating its average nucleotide identity (ANI) compared to a reference strain, or multiple reference strains.
+
+Fortunately, a program has been developed that can do this for us, called `fastANI`.
+
+Before we install it however, we are going to use an updated package manager. Make sure you are in your base environment with Conda, then run...
+```
+conda install -c conda-forge mamba
+```
+Now you can replace `conda` in each command with `mamba`.
+\
+1. Create a new environment for `fastANI` with:
+```
+mamba create -n fastANI
+```
+2. Activate this environment, then install fastANI by running
+```
+mamba install -c bioconda fastani
+```
+3. Make a new directory called `genomes`
+4. Download the compressed `genomes` file from NOW and upload it to the `genomes` folder on the cloud.
+5. The next thing we need to do is create a file containing the file paths of each of your reference genomes, this is required by fastANI. Move into your `genomes` directory and then type:
+```
+find $(pwd) -type f > reference_list.txt
+```
+6. Using `vi`, edit `reference_list.txt` to remove the last line.
+7. Move `reference_list.txt` back into your `project` directory. Create a folder called `fastani` for the results.
+8. Now we can run `fastani`, type:
+```
+fastANI -q spades/contigs.fasta --rl reference_list.txt -o fastani/fastani_results.txt
+```
+###### 16S ribosomal RNA
+
+Although overtaken by more accurate methods, phylogenetic analysis of bacterial 16S ribosomal RNA still remains a useful way to identify the genus and species of an organism. This is done by creating a phylogenetic tree of reference 16S sequences from different species of bacteria, with the 16S sequence of your genome / genomes included. Your genome *should* cluster with one of the reference sequences on the tree.
+
+1. Download the two 16S sequence files from NOW. `My_16S` contains the 16S sequence I have identified in your genome, `16S_sequences` contains the sequences from a number of reference strains. Upload these to a directory on the cloud.
+2. Using `cat` stitch the two 16S files together...
+```
+cat 16S_sequences.fasta My_16S.fasta >> sequences.fasta
+```
+3. Use `vi` to check the output file is formatted correctly.
+4. Using `mamba`, create an environment and install the program `prank`. We will use this to align the `sequences.fasta` file.
+```
+prank -d=sequences.fasta -o=16S_aligned -F
+```
+5. Using `mamba`, create an environment and install the program `raxml-ng`. We will use this to create the phylogenetic tree.
+```
+ raxml-ng --msa 16S_aligned.fas --model GTR+G+I --prefix 16S_tree --threads 1
+ ```
+ 6. Export the `.bestTree` file and upload it to [iTOL.](https://itol.embl.de/upload.cgi)
+
+### Have a go yourself
+
+Download the sequence read files from NOW and have a go at assembling a genome using the material from this document.
+
+Information about the overall project is available at [this webpage.](https://www.ncbi.nlm.nih.gov/bioproject/?term=microbial+tracking-2)
