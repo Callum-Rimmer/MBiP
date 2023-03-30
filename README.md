@@ -185,7 +185,7 @@ conda config --show channels
 ```
 We need to add the channel `Bioconda`. This contains most of the programs you need for bioinformatics. To add this channel, type...
 ```
-conda config --add channel bioconda
+conda config --add channels bioconda
 ```
 Now we've checked we have the appropriate channels setup, we can install fastqc in our environment by running...
 ```
@@ -366,14 +366,14 @@ Although overtaken by more accurate methods, phylogenetic analysis of bacterial 
 ```
 cat 16S_sequences.fasta My_16S.fasta >> sequences.fasta
 ```
-3. Use `vi` to check the output file is formatted correctly.
+3. Use `vi` to check the output file is formatted correctly. Make sure your sequence begins on a new line.
 4. Using `mamba`, create an environment and install the program `prank`. We will use this to align the `sequences.fasta` file.
 ```
 prank -d=sequences.fasta -o=16S_aligned -F
 ```
 5. Using `mamba`, create an environment and install the program `raxml-ng`. We will use this to create the phylogenetic tree.
 ```
- raxml-ng --msa 16S_aligned.fas --model GTR+G+I --prefix 16S_tree --threads 1
+ raxml-ng --msa 16S_aligned.best.fas --model GTR+G+I --prefix 16S_tree --threads 1
  ```
  6. Export the `.bestTree` file and upload it to [iTOL.](https://itol.embl.de/upload.cgi)
 
