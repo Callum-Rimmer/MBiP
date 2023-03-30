@@ -351,7 +351,7 @@ mamba install -c bioconda fastani
 ```
 find $(pwd) -type f > reference_list.txt
 ```
-6. Using `vi`, edit `reference_list.txt` to remove the last line.
+6. Using `vi`, edit `reference_list.txt` to remove the line for the file itself.
 7. Move `reference_list.txt` back into your `project` directory. Create a folder called `fastani` for the results.
 8. Now we can run `fastani`, type:
 ```
